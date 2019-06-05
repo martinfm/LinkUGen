@@ -1,0 +1,6 @@
+[submodule "supercollider"]
+	path = supercollider
+	url = https://github.com/supercollider/supercollider.git
+[submodule "link"]
+	path = link
+	url = https://github.com/Ableton/link.git
