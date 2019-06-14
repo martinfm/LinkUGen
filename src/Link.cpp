@@ -131,6 +131,42 @@ void LinkBeat_next(LinkBeat* unit, int inNumSamples)
   OUT0(0) = static_cast<float>(beats);
 }
 
+//-------LinkPhase--------
+
+struct LinkPhase : public Unit
+{
+};
+
+extern "C"
+{
+ void LinkPhase_Ctor(LinkPhase* unit);
+ void LinkPhase_next(LinkPhase* unit, int inNumSamples);
+}
+
+void LinkPhase_Ctor(LinkPhase* unit)
+{
+  ableton::Link *link = getLinkInstance();
+
+  if (link->isEnabled()) {
+    SETCALC(LinkPhase_next);
+  }
+  else {
+    SETCALC(*(ClearUnitOutputs));
+    Print("Ableton Link not enabled! Cannot create valid LinkPhase\n");
+  }
+}
+
+void LinkPhase_next(LinkPhase* unit, int inNumSamples)
+{
+
+  ableton::Link *link = getLinkInstance();
+  const auto sessionState = link->captureAudioSessionState();
+
+  const auto time = link->clock().micros();
+  const auto phase = sessionState.phaseAtTime(time, quantum);
+  OUT0(0) = static_cast<float>(phase);
+}
+
 //-------LinkCount-------
 
 struct LinkCount : public Unit 
@@ -176,6 +212,7 @@ PluginLoad(Link)
   DefineSimpleUnit(Link);
   DefineSimpleUnit(LinkTempo);
   DefineSimpleUnit(LinkBeat);
+  DefineSimpleUnit(LinkPhase);
   DefineSimpleUnit(LinkCount);
 
 }

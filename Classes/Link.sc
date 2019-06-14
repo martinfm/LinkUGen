@@ -21,11 +21,11 @@ LinkBeat : UGen {
 	}
 }
 
-/*LinkPhase : UGen {
+LinkPhase : UGen {
   *kr {
 		^this.multiNew('control');
 	}
-}*/
+}
 
 LinkCount : UGen {
   *kr {| rate = 1 |
